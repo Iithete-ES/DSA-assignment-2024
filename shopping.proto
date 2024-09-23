@@ -1,0 +1,68 @@
+syntax = "proto3";
+
+service ShoppingService {
+    // Admin operations
+    rpc addProduct(Product) returns (ProductResponse);
+    rpc updateProduct(Product) returns (ProductResponse);
+    rpc removeProduct(ProductId) returns (ProductListResponse);
+    rpc listAvailableProducts(Empty) returns (ProductListResponse);
+    
+    // Customer operations
+    rpc searchProduct(ProductId) returns (ProductResponse);
+    rpc addToCart(AddToCartRequest) returns (CartResponse);
+    rpc placeOrder(UserId) returns (OrderResponse);
+    rpc createUsers(stream User) returns (UserCreationResponse);
+}
+
+// Message Definitions
+message Product {
+    string sku = 1;
+    string name = 2;
+    string description = 3;
+    double price = 4;
+    int32 stockQuantity = 5;
+    bool available = 6;
+}
+
+message ProductResponse {
+    string message = 1;
+    Product product = 2;
+}
+
+message ProductId {
+    string sku = 1;
+}
+
+message ProductListResponse {
+    repeated Product products = 1;
+}
+
+message AddToCartRequest {
+    string userId = 1;
+    string sku = 2;
+}
+
+message CartResponse {
+    string message = 1;
+}
+
+message User {
+    string userId = 1;
+    string name = 2;
+    string userType = 3; // Either 'admin' or 'customer'
+}
+
+message UserId {
+    string userId = 1;
+}
+
+message OrderResponse {
+    string message = 1;
+    repeated Product products = 2;
+}
+
+message UserCreationResponse {
+    string message = 1;
+}
+
+message Empty {}
